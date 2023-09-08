@@ -32,19 +32,15 @@ void Player_UpdateState( edict_t * player ) {
 		player->sv.ent_flags |= SVFL_IS_CROUCHING;
 	}
 
-	if ( player->client->quad_time > level.time ) {
-		player->sv.ent_flags |= SVFL_HAS_DMG_BOOST;
-	} else if ( player->client->quadfire_time > level.time ) {
-		player->sv.ent_flags |= SVFL_HAS_DMG_BOOST;
-	} else if ( player->client->double_time > level.time ) {
+	if ( BotHasQuadDamage(player) || BotHasDoubleDamage(player) || BotHasDualfireDamage(player) ) {
 		player->sv.ent_flags |= SVFL_HAS_DMG_BOOST;
 	}
 
-	if ( player->client->invincible_time > level.time ) {
+	if ( BotHasInvulnerability(player) ) {
 		player->sv.ent_flags |= SVFL_HAS_PROTECTION;
 	}
 
-	if ( player->client->invisible_time > level.time ) {
+	if ( BotHasInvisibility(player) ) {
 		player->sv.ent_flags |= SVFL_HAS_INVISIBILITY;
 	}
 
@@ -529,4 +525,59 @@ const edict_t * FindActorUnderCrosshair( const edict_t * player ) {
 	}
 
 	return traceEnt;
+}
+
+/*
+================
+BotHasQuadDamage
+
+Returns true if the bot has Quad Damage.
+================
+*/
+bool BotHasQuadDamage( const edict_t * player ) {
+	return player->client->quad_time > level.time;
+}
+
+/*
+================
+BotHasDualfireDamage
+
+Returns true if the bot has Dualfire Damage.
+================
+*/
+bool BotHasDualfireDamage( const edict_t * player ) {
+	return player->client->quadfire_time > level.time;
+}
+
+/*
+================
+BotHasDoubleDamage
+
+Returns true if the bot has Double Damage.
+================
+*/
+bool BotHasDoubleDamage( const edict_t * player ) {
+	return player->client->double_time > level.time;
+}
+
+/*
+================
+BotHasInvulnerability
+
+Returns true if the bot has Invulnerability.
+================
+*/
+bool BotHasInvulnerability( const edict_t * player ) {
+	return player->client->invincible_time > level.time;
+}
+
+/*
+================
+BotHasInvisibility
+
+Returns true if the bot has Invisibility.
+================
+*/
+bool BotHasInvisibility( const edict_t * player ) {
+	return player->client->invisible_time > level.time;
 }
